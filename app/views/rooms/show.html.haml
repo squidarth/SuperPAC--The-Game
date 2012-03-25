@@ -1,29 +1,73 @@
 %h1= @room.name
 
+=link_to "button", "#", :id => "button"
+%div#cover
+  Next Stage
 
 %div#game
+  =form_for "user", :url => ready_path(@room), :remote => true, :html => {:class => "state_form"} do |f|
+    =f.label "Marketing"
+    =f.text_field :marketing_budget
+    =f.label "Staffers"
+    =f.text_field :staff_budget
+    =f.label "Travel"
+    =f.text_field :travel_budget
+    =f.submit "Ready!", :class => "submitter btn btn-primary"
 
-  %div
-    =text_field_tag :name, " ", :id => "tester"
-    =link_to "Send", "#", :id => "test-button"
-
-  %ul.messages
-    %li First
-
+%script{:src => "http://localhost:8080/application.js", :type => "text/javascript", :charset => "utf-8"}
 :javascript
-  $(document).ready(function(){
-    var s = new WebSocket("ws://localhost:9876/");
-    s.onopen = function(e) { 
-      alert("opened");
-      $("#test-button").click(function(e){
-        alert("something happened");
-        e.preventDefault();
-        s.send($("#tester").val());
-      });
 
-    }
-    s.onclose = function(e) { alert("closed");}
-    s.onmessage = function(e) { alert("got: " + e.data);}
+  function updateUI(data){
+    //update the HTML elements with the newly collected data
+
+
+
+  }
+
+
+  function start(){
+    //make ajax request to get the game state
+    // /rooms/ + @room.id + /getstate
+    $.ajax({
+      url: "/rooms/#{@room.id}/gamestate",
+      success: function(data){
+        updateUI(data);
+      }
+    
+    });
+
+    //take the JSON that gets returned and use that to update the game board
+
+  }
+  function ready(){
+    $.ajax({
+      url: "/rooms/#{@room.id}/gamestate",
+      success: function(data){
+        updateUI(data);
+      }
+    
+    });
+  }
   
-      });
+  var jug = new Juggernaut;
+  jub.subscribe("channel1", function(data){
+    if(data == "start"){
+      start();
+
+    }else if(data == "ready"){
+      ready();
+    }
+
+  });
+  
+  $(".submitter").click(function(){
+    $("#cover").show();
+    $("#cover").animate({
+      height: 500
+    }, 500, function(){
+    });
+
+ 
+
+  });
 

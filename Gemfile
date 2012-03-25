@@ -13,6 +13,8 @@ gem 'aws-s3', :require => "aws/s3"
 gem 'aws-sdk'
 gem 'twitter-bootstrap-rails'
 gem 'haml-rails'
+gem 'juggernaut'
+
 
 # Gems used only for assets and not required
 # in production environments by default.

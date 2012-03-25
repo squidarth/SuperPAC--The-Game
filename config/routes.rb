@@ -5,6 +5,9 @@ Superpac::Application.routes.draw do
   match "/about", :to => "pages#about"
   match "/contact", :to => "pages#contact"
   match "/rooms/:id/join", :to => "rooms#add_user", :as => :join_room  
+  
+  match "/rooms/:id/ready", :to => "rooms#ready", :as => :ready
+  match "/rooms/:id/getstate", :to => "rooms#get_state", :as => :get_state
   resources :rooms
   
   # The priority is based upon order of creation:
