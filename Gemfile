@@ -14,6 +14,7 @@ gem 'aws-sdk'
 gem 'twitter-bootstrap-rails'
 gem 'haml-rails'
 gem 'juggernaut'
+gem 'nytimes-articles'
 
 
 # Gems used only for assets and not required

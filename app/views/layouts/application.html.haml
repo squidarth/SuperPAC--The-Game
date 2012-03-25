@@ -8,6 +8,7 @@
   %body
     %div.row
       %div{:class => "span12 top-level"}
-        %h1.top SuperPAC--The Game    
+        %h1.top 
+          =link_to "SuperPAC, The Game", root_path    
         =link_to "Log Out", destroy_user_session_path, :method => :delete
     =yield

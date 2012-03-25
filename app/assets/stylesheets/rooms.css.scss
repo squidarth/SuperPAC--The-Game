@@ -8,7 +8,7 @@
     position: absolute;
     top: 10%;
     left: 10%;
-    width: 1000px;
+    width: 1100px;
     height: 1px;
     border: solid 1px #444;
     background: #eeefff;
@@ -16,13 +16,72 @@
     z-index: 3000;
 }
 
+#cover #loading{
+    position: absolute;
+    top: 37%;
+    left: 35%;
+}
+#cover #loading img{
+    position: absolute;
+    left: 38%;
+
+}
+
+.box{
+    background: #fff;
+
+}
+#stage{
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0 0 7px 0;
+}
 #game{
    position: absolute;
     top: 10%;
     left: 10%;
     width: 1000px;
-    height: 500px;
+    height: 600px;
+    background: #efefef;
+    padding: 10px 10px 10px 10px;
+}
+
+
+#win{
+    display: none;
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 1100px;
+    height: 600px;
     border: solid 1px #444;
+    background: #eeefff;
+    font-size: 3em;
+    z-index: 4000;
+}
 
+#lose{
+    display: none;
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    height: 600px;
+    width: 1100px;
+    border: solid 1px #444;
+    background: #eeefff;
+    font-size: 3em;
+    z-index: 4000;
+}
 
+.trivia{
+    display: none;
+}
+
+#correct{
+    display: none;
+    position: absolute;
+    top: 30%;
+    left: 40%;
+    width: 150px;
+    z-index: 5000;
 }

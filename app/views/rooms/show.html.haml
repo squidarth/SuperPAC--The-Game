@@ -1,50 +1,84 @@
-%h1= @room.name
+%div#correct
+  %div{:class => "alert", "data-dimiss" => "alert"}
+    =link_to "x", "#", :class => "close"
+    %strong
+      You are correct!
 
-=link_to "button", "#", :id => "button"
 %div#cover
-  Next Stage
+  %div#loading
+    %h1 Waiting for the others...
+    =image_tag "loading.gif"
+%div#win
+  %div#win-text
+    %h1 You won!
 
+%div#lose
+  %div#lose-text
+    %h1 You lost!
+    
 %div#game
+  %div{:class => "alert alert-success"}
+    =link_to "x", "#", :class => "close"
+    %strong
+    .current_event
   %div#stage
 
-  %div.current_event
-
-  
-  %div{:id => "latest-news"}
-    %ul
-
-  
-  
-  %ul{:class => "thumbnails players"}
-    %li{:class => "span3", :id => "user1"}
-      %div.thumbnail
-        =image_tag "rails.png"
-        %div.caption
-          %span{:class => "name"}
-          %br
-          %span{:class => "poll-number"}
-    %li{:class => "span3", :id => "user2"}
-      %div.thumbnail
-        =image_tag "rails.png"
-        %div.caption
-          %span{:class => "name"}
-          %br
-          %span{:class => "poll-number"}
-  =form_for "user", :url => ready_path(@room), :remote => true, :html => {:class => "state_form"} do |f|
-    =f.label "Marketing"
-    =f.text_field :marketing_budget
-    =f.label "Staffers"
-    =f.text_field :staff_budget
-    =f.label "Travel"
-    =f.text_field :travel_budget
-    %label{:id => "option1label"}
-    %input{:id => "option1",:type => "radio", :name => "user[option1]"}
-    %label{:id => "option2label"}  
-    %input{:id => "option2", :type => "radio", :name => "user[option2]"}
-    %label{:id => "option3label"}  
-    %input{:id => "option3", :type => "radio", :name => "user[option3]"}
-    =f.submit "Ready!", :class => "submitter btn btn-primary"
-
+  %div.row
+    %div.span6
+      %ul{:class => "thumbnails players"}
+        %li{:class => "span3", :id => "user1"}
+          %div{:class => "box thumbnail"}
+            =image_tag "rails.png"
+            %div.caption
+              %h3{:class => "name"}
+              %br
+              %h4{:class => "poll-number"}
+        %li{:class => "span3", :id => "user2"}
+          %div{:class => "thumbnail box"}
+            =image_tag "rails.png"
+            %div.caption
+              %h3{:class => "name"}
+              %br
+              %h4{:class => "poll-number"}
+    %div.span3
+      %div{:id => "latest-news"}
+        %h3 Latest News
+        %ul
+    
+  %div.row
+    %div.span3
+      %div.stats
+        %h2 Stats
+        %p 
+    %div{:class => "span3 trivia"}
+      %h2 A Sarah Palin Stumper
+      %h3 Who said "The other thing we have to do is to take seriously the role in this problem of â€¦ older men who prey on underage women. There are consequences to decisions?"
+      =form_for "user", :url => ready_path(@room), :remote => true, :html => {:class => "state_form"} do |f|
+        %label{:id => "trivia1label"}
+          Mitt Romney
+        %input{:id => "trivia1",:type => "radio", :name => "user[previous_move]"}
+        %label{:id => "trivia2label"}  
+          Rick Santorum  
+        %input{:id => "trivia2", :type => "radio", :name => "user[previous_move]"}
+        %label{:id => "trivia3label"}  
+          Bill Clinton  
+        %input{:id => "trivia3", :type => "radio", :name => "user[previous_move]"}
+        %br
+        %br
+        =f.submit "Ready!", :class => "trivia-submitter btn btn-primary"
+    %div{:class => "span3 normal"}
+      %h2 Your Turn:
+      =form_for "user", :url => ready_path(@room), :remote => true, :html => {:class => "state_form"} do |f|
+        %label{:id => "option1label"}
+        %input{:id => "option1",:type => "radio", :name => "user[previous_move]"}
+        %label{:id => "option2label"}  
+        %input{:id => "option2", :type => "radio", :name => "user[previous_move]"}
+        %label{:id => "option3label"}  
+        %input{:id => "option3", :type => "radio", :name => "user[previous_move]"}
+        %br
+        %br
+        =f.submit "Ready!", :class => "submitter btn btn-primary"
+    
 //Now put in the checkboxes for the questions.  Maybe do a drop-down
 //for now?
 %script{:src => "http://localhost:8080/application.js", :type => "text/javascript", :charset => "utf-8"}
@@ -52,6 +86,54 @@
   $(document).ready(function(){
     start();
   });
+
+  $(".close").click(function(){
+    $(".alert").fadeOut();
+  });
+
+  function showCorrect(){
+   $("#correct").show(); 
+
+
+  }
+  $(".trivia-submitter").click(function(){
+    showCorrect();
+    $(".normal form").submit();
+    $("#cover").show();
+    $("#cover").animate({
+      height: 700
+    }, 500, function(){
+    });
+
+  
+    return false;
+  });
+  function switchForms(){
+    $(".normal").hide();
+    $(".trivia").show();
+  }
+
+  function switchFormsBack(){
+    $(".trivia").hide();
+    $(".normal").show();
+
+  }
+  function win(){
+    $("#win").fadeIn();
+
+  }
+  function lose(){
+    $("#lose").fadeIn();
+
+  }
+  function updateStats(me){
+    $(".stats p").html(" ");
+    var intelligence = me["intelligence"];
+    var budget = me["budget"];
+    var intouch = me["intouch"];
+  
+    $(".stats p").append("<p><b>Budget:</b> $" + budget + "<br /><b>Perceived Intelligence:</b> " + intelligence + "<br /><b>In touch with the people:</b> " + intouch);
+  }
 
   function removeCover(){
     $("#cover").animate({
@@ -63,16 +145,13 @@
 
   }
   function updateStage(stage){
-    $("#stage").text(stage);
+    $("#stage").text("Stage: " + stage);
   }
-  function updateNews(users){
+  function updateNews(titles){
     var news = []
-    $("#latest-news").html(" "); 
-    for(var i = 0;i<users.length;i++){
-      news.push(users[i]["latest_news"]);
-    }
-    for(var i=0;i<news.length;i++){
-      $("#latest-news").append("<li>" + news[i] + "</li>");
+    $("#latest-news ul").html(" "); 
+    for(var i=0;i<titles.length;i++){
+      $("#latest-news ul").append("<li>" + titles[i] +  "</li>");
     }
   }
 
@@ -88,24 +167,43 @@
 
   function updateEvent(the_event){
     $(".current_event").html(the_event);
+    $(".current_event").fadeIn();
+    $(".alert").fadeIn();
   }
 
   function updateUsers(users){
     for(var i = 1; i <= users.length; i++){
       $("#user" + i).children(".thumbnail").children("img").attr("src",users[i-1]["image"]); 
       $("#user" + i).children(".thumbnail").children(".caption").children(".name").text(users[i-1]["name"]);
-      $("#user" + i).children(".thumbnail").children(".caption").children(".poll-number").text(users[i-1]["poll_number"]);
+      $("#user" + i).children(".thumbnail").children(".caption").children(".poll-number").text(users[i-1]["poll_number"] + "%");
     }
   }
 
   function updateUI(data){
     //update the HTML elements with the newly collected data
-    updateUsers(data["users"]);
-    updateNews(data["users"]);
-    updateQuestions(data["next_moves"]);
-    updateEvent(data["event"]);
-    updateStage(data["stage"]);
-    removeCover();
+    if(data["won"] || data["lost"]){
+      if(data["won"]){
+        win();
+
+      }else{
+        lose();
+      }
+
+    }else{
+      if(data["trivia"]){
+        switchForms();
+      }else{
+        switchFormsBack();
+
+      }
+      updateUsers(data["users"]);
+      updateNews(data["titles"]);
+      updateQuestions(data["next_moves"]);
+      updateEvent(data["event"]);
+      updateStage(data["stage"]);
+      updateStats(data["me"]);
+      removeCover();
+    }
   }
 
 
@@ -147,7 +245,7 @@
   $(".submitter").click(function(){
     $("#cover").show();
     $("#cover").animate({
-      height: 500
+      height: 700
     }, 500, function(){
     });
 
