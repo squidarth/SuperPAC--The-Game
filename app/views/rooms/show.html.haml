@@ -1,0 +1,29 @@
+%h1= @room.name
+
+
+%div#game
+
+  %div
+    =text_field_tag :name, " ", :id => "tester"
+    =link_to "Send", "#", :id => "test-button"
+
+  %ul.messages
+    %li First
+
+:javascript
+  $(document).ready(function(){
+    var s = new WebSocket("ws://localhost:9876/");
+    s.onopen = function(e) { 
+      alert("opened");
+      $("#test-button").click(function(e){
+        alert("something happened");
+        e.preventDefault();
+        s.send($("#tester").val());
+      });
+
+    }
+    s.onclose = function(e) { alert("closed");}
+    s.onmessage = function(e) { alert("got: " + e.data);}
+  
+      });
+

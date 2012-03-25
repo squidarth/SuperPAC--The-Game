@@ -1,1 +1,33 @@
-%h1 Welcome to SuperPAC-The Game
+%div.row
+  %div.span8
+    %div{:class => "row register"}
+      %div.span3
+        =form_for("user", :url => user_registration_path, :html => {:class => "well sign-up"}) do |f| 
+          %h2 Sign Up!
+          =f.label :email
+          =f.email_field :email
+          =f.label :password
+          =f.password_field :password
+          =f.label :password_confirmation
+          =f.password_field :password_confirmation
+          %br
+          =f.submit "Sign up", :class => "btn btn-primary"   
+      %div.span3
+        =form_for "user", :url => user_session_path, :method => :post, :html => {:class => "well"} do |f|
+          %h2 Sign in!
+          =f.label :email
+          =f.email_field :email
+          =f.label :password
+          =f.password_field :password
+          %br
+          =f.submit "Sign in", :class => "btn btn-primary"
+  %div.span4
+    %div.descrip
+      %h3 About
+      This is an awesome game. Sign in to see what rooms are available!
+      %br
+      %br
+      This was made by
+      =link_to "Sid Shanker", "http://www.twitter.com/sshanker220"
+      at the Spring 2012 HackNY Hackathon
+

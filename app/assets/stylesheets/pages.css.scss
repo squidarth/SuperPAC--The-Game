@@ -1,3 +1,24 @@
 // Place all the styles related to the pages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.top-level{
+    margin: 0 0 0 60px;
+    border-bottom: solid 1px #444;
+}
+
+.register{
+    margin: 10px 0 0 20px;
+
+}
+
+.descrip{
+    background: #eeefff;
+    border-radius: 5px;
+    padding: 5px 5px 5px 5px;
+    margin: 20px 0 0 0;
+    overflow: auto;
+
+
+}

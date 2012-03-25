@@ -1,0 +1,19 @@
+%h2 Rooms
+
+%div.row
+  %div.span9
+    %ul
+      -@rooms.each do |room|
+        %li
+          =link_to room.name, room_path(room)
+          =link_to "Join Room", join_room_path(room), :class => "btn btn-primary"
+
+
+  %div.span3
+    =form_for Room.new, :url => rooms_path, :html => {:class => "well"} do |f|
+      =f.label "Room Name"
+      =f.text_field :name
+      %br
+      =f.submit "Create Room"
+
+
