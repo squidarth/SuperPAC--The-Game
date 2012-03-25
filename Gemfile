@@ -3,9 +3,16 @@ source 'http://rubygems.org'
 gem 'rails', '3.1.3'
 
 # Bundle edge Rails instead:
-# gem 'rails',     :git => 'git://github.com/rails/rails.git'
-
-
+# gem 'rails',     :git => 'git://github.com/rails/rails.git
+#
+gem 'mongoid'
+gem 'bson_ext'
+gem 'devise'
+gem 'mongoid-paperclip', :require => "mongoid_paperclip"
+gem 'aws-s3', :require => "aws/s3"
+gem 'aws-sdk'
+gem 'twitter-bootstrap-rails'
+gem 'haml-rails'
 
 # Gems used only for assets and not required
 # in production environments by default.
