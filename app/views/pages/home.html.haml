@@ -4,6 +4,10 @@
       %div.span3
         =form_for("user", :url => user_registration_path, :html => {:class => "well sign-up"}) do |f| 
           %h2 Sign Up!
+          =f.label :name
+          =f.text_field :name
+          =f.label :picture
+          =f.file_field :avatar
           =f.label :email
           =f.email_field :email
           =f.label :password

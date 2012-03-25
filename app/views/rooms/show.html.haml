@@ -5,6 +5,31 @@
   Next Stage
 
 %div#game
+  %div#stage
+
+  %div.current_event
+
+  
+  %div{:id => "latest-news"}
+    %ul
+
+  
+  
+  %ul{:class => "thumbnails players"}
+    %li{:class => "span3", :id => "user1"}
+      %div.thumbnail
+        =image_tag "rails.png"
+        %div.caption
+          %span{:class => "name"}
+          %br
+          %span{:class => "poll-number"}
+    %li{:class => "span3", :id => "user2"}
+      %div.thumbnail
+        =image_tag "rails.png"
+        %div.caption
+          %span{:class => "name"}
+          %br
+          %span{:class => "poll-number"}
   =form_for "user", :url => ready_path(@room), :remote => true, :html => {:class => "state_form"} do |f|
     =f.label "Marketing"
     =f.text_field :marketing_budget
@@ -12,16 +37,75 @@
     =f.text_field :staff_budget
     =f.label "Travel"
     =f.text_field :travel_budget
+    %label{:id => "option1label"}
+    %input{:id => "option1",:type => "radio", :name => "user[option1]"}
+    %label{:id => "option2label"}  
+    %input{:id => "option2", :type => "radio", :name => "user[option2]"}
+    %label{:id => "option3label"}  
+    %input{:id => "option3", :type => "radio", :name => "user[option3]"}
     =f.submit "Ready!", :class => "submitter btn btn-primary"
 
+//Now put in the checkboxes for the questions.  Maybe do a drop-down
+//for now?
 %script{:src => "http://localhost:8080/application.js", :type => "text/javascript", :charset => "utf-8"}
 :javascript
+  $(document).ready(function(){
+    start();
+  });
+
+  function removeCover(){
+    $("#cover").animate({
+      height: 1
+    }, 500, function(){
+    $("#cover").fadeOut(); 
+    
+    });
+
+  }
+  function updateStage(stage){
+    $("#stage").text(stage);
+  }
+  function updateNews(users){
+    var news = []
+    $("#latest-news").html(" "); 
+    for(var i = 0;i<users.length;i++){
+      news.push(users[i]["latest_news"]);
+    }
+    for(var i=0;i<news.length;i++){
+      $("#latest-news").append("<li>" + news[i] + "</li>");
+    }
+  }
+
+  function updateQuestions(next_moves){
+    $("#option1label").text(next_moves[0]);
+    $("#option2label").text(next_moves[1]);
+    $("#option3label").text(next_moves[2]);
+
+    $("#option1").attr("value",next_moves[0]);
+    $("#option2").attr("value", next_moves[1]);
+    $("#option3").attr("value", next_moves[2]);
+  }
+
+  function updateEvent(the_event){
+    $(".current_event").html(the_event);
+  }
+
+  function updateUsers(users){
+    for(var i = 1; i <= users.length; i++){
+      $("#user" + i).children(".thumbnail").children("img").attr("src",users[i-1]["image"]); 
+      $("#user" + i).children(".thumbnail").children(".caption").children(".name").text(users[i-1]["name"]);
+      $("#user" + i).children(".thumbnail").children(".caption").children(".poll-number").text(users[i-1]["poll_number"]);
+    }
+  }
 
   function updateUI(data){
     //update the HTML elements with the newly collected data
-
-
-
+    updateUsers(data["users"]);
+    updateNews(data["users"]);
+    updateQuestions(data["next_moves"]);
+    updateEvent(data["event"]);
+    updateStage(data["stage"]);
+    removeCover();
   }
 
 
@@ -29,7 +113,7 @@
     //make ajax request to get the game state
     // /rooms/ + @room.id + /getstate
     $.ajax({
-      url: "/rooms/#{@room.id}/gamestate",
+      url: "/rooms/#{@room.id}/getstate",
       success: function(data){
         updateUI(data);
       }
@@ -41,7 +125,7 @@
   }
   function ready(){
     $.ajax({
-      url: "/rooms/#{@room.id}/gamestate",
+      url: "/rooms/#{@room.id}/getstate",
       success: function(data){
         updateUI(data);
       }
@@ -50,7 +134,7 @@
   }
   
   var jug = new Juggernaut;
-  jub.subscribe("channel1", function(data){
+  jug.subscribe("channel1", function(data){
     if(data == "start"){
       start();
 

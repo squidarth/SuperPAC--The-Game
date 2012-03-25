@@ -18,10 +18,10 @@ class RoomsController < ApplicationController
 
     def add_user
         @room = Room.find(params[:id])
-        if @room.users.count < 3
+        if @room.users.count < 2
             @room.users << current_user
             @room.save
-            if @room.users.count == 3
+            if @room.users.count == 2
                 Juggernaut.publish("channel1", "start")
             end
 
@@ -32,6 +32,12 @@ class RoomsController < ApplicationController
         end
 
    end
+
+    def leave_room
+        current_user.room_id = nil
+        current_user.save!
+        redirect_to rooms_path
+    end
 
 
     def ready
@@ -50,15 +56,15 @@ class RoomsController < ApplicationController
            @room.update_pollnums
            Juggernaut.publish("channel1", "ready")
        end
-
+       render :json => {:result => "Success"}
     end
 
     def get_state
-        @room = Room.find(param[:id])
+        @room = Room.find(params[:id])
         @user = current_user
         @user.ready = false
         @user.save!
-        render :json => {:users => @room.users, :next_moves => @user.get_next_moves, :event => @user.get_next_event}
+        render :json => {:users => @room.users, :next_moves => @user.get_next_moves, :event => @user.get_next_event, :stage => @room.turn}
     end
 
 

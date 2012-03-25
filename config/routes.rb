@@ -8,6 +8,7 @@ Superpac::Application.routes.draw do
   
   match "/rooms/:id/ready", :to => "rooms#ready", :as => :ready
   match "/rooms/:id/getstate", :to => "rooms#get_state", :as => :get_state
+  match "/rooms/:id/leaveroom", :to => "rooms#leave_room", :as => :leave_room
   resources :rooms
   
   # The priority is based upon order of creation:

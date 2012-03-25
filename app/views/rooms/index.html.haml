@@ -7,7 +7,8 @@
         %li
           =link_to room.name, room_path(room)
           =link_to "Join Room", join_room_path(room), :class => "btn btn-primary"
-
+          -if room.users.include?(current_user)
+            =link_to "Leave Room", leave_room_path(room), :class => "btn btn-danger"
 
   %div.span3
     =form_for Room.new, :url => rooms_path, :html => {:class => "well"} do |f|
